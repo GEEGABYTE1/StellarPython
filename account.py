@@ -83,6 +83,6 @@ class Account:
                 
                       
 
-testnet = Account()
+testnet_acc = Account()
 
-print(testnet)
+print(testnet_acc)

@@ -3,11 +3,19 @@ import requests
 import time
 from stellar_sdk import Server
 from termcolor import colored
+from pymongo import MongoClient
+
+
+cluster = MongoClient('mongodb+srv://BlindCelery:stellar@stellar.hibrh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+db = cluster['Accounts']['Stellar']
 
 class Account:
+    
     keys = []
     
     def create_account(self):
+        if len(self.keys) > 0:
+            self.keys = []
         pair = Keypair.random()
         secret_pair = pair.secret
         public_pair = pair.public_key
@@ -25,12 +33,19 @@ class Account:
         print("\n")
         print(colored("If you don't have a public key, please type /create or /fetch_pk to fetch your public key", 'blue'))
         public_key = str(input("Please print your public key: "))
+        username = str(input("Please type in a username: "))
         public_key = public_key.strip(" ")
         public_key = public_key.lower()
         if public_key == '/create':
             public_key = self.create_account()
+            acc = {'Username': username, 'PKey': public_key, 'Skey': self.keys[0]}
+            db.insert_one(acc)
         elif public_key == '/fetch_pk':
-            public_key = self.keys[-1]
+            if len(self.keys) == 0:
+                print("There is no key created or saved at this time")
+                time.sleep(0.2)
+            else:
+                public_key = self.keys[-1]
             
         
         response = requests.get(f"https://friendbot.stellar.org?addr={public_key}")

@@ -74,6 +74,9 @@ class Contract:
                 print('-'*24)
                 print(colored("Response: {}".format(response), 'blue '))            
                 print('-'*24)
+                user_trans_list = result[-2]
+                transcation_detail = {'Destination_Key': result[1], 'Amount': lumen_amount, 'Message': user_message}
+                user_trans_list.append(transcation_detail)
             except (BadRequestError, BadResponseError) as err:
                 print(colored('Something went wrong! ', 'red'))
                 time.sleep(0.2)
@@ -90,7 +93,7 @@ class Contract:
         for account in all_accounts:
             if account['Username'] == user:
                 fetched = True
-                return account['Skey'], account['Pkey'], fetched 
+                return account['Skey'], account['Pkey'], account['Transactions'], fetched 
             else:
                 pass 
     

@@ -12,6 +12,7 @@ db = cluster['Accounts']['Stellar']
 class Account:
     
     keys = []
+    signed_in = False
     
     def create_account(self):
         if len(self.keys) > 0:
@@ -69,6 +70,7 @@ class Account:
             return False
     
     def __init__(self):
+        self.signed_in = False
         print('\n')
         print('-'*25)
         print("/sign_up: To create a new Stellar account")
@@ -94,10 +96,11 @@ class Account:
                     pass 
                 else:
                     print(colored("You have successfully signed in! ", 'green'))
+                    self.signed_in = True
+                    
 
                 
                       
 
 testnet_acc = Account()
 
-print(testnet_acc)

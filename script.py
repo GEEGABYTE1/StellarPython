@@ -23,7 +23,20 @@ class Script:
         print("/receive_trans: to check or receive transactions")
         print("-"*24)
         time.sleep(0.2)
+        self.user_prompt()
 
+
+    
+    def user_prompt(self):
+        while True:
+            print("\n")
+            prompt = str(input("Please enter a command"))
+            
+            if prompt == '/create_trans':
+                time.sleep(0.1)
+                print(colored('Directing you to creating a transaction ', 'blue'))
+                user_trans = Contract()
+                print(user_trans)
         
         
         

@@ -39,7 +39,7 @@ class Account:
         public_key = public_key.lower()
         if public_key == '/create':
             public_key = self.create_account()
-            acc = {'Username': username, 'PKey': public_key, 'Transactions': [], 'Skey': self.keys[0]}
+            acc = {'Username': username, 'PKey': public_key, 'Transactions': [], 'Paging_Token': None, 'Skey': self.keys[0]}
             db.insert_one(acc)
         elif public_key == '/fetch_pk':
             if len(self.keys) == 0:

@@ -20,7 +20,30 @@ def save_paging_token(paging_token):
     
     if checked == False:
         print(colored("Account not found", 'red'))
-     
+    
+server = Server("https://horizon-testnet.stellar.org")
+
+def receieve_payment():
+    user_id = testnet_acc.keys[-1]
+    payments = server.payments().for_account(user_id)
+    
+    last_token = load_last_paging_token()
+    if last_token:
+        payments.cursor(last_token)
+        
+        for payment in payments.stream():
+            save_paging_token(payment['paging_token'])
+
+            if payment['type'] != 'payment':
+                continue 
+            if payment['to'] != account_id:
+                continue
+            if payment['asset_type'] == 'native':
+                asset = 'Lumens'
+            else:
+                asset = f"{payment['asset_code']}:{payment['asset_issuer']}"
+            print("Payment: {amount} from payment from {sender}".format(amount=asset, sender=payment['from']))
+
 
 
     

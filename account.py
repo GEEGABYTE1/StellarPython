@@ -97,6 +97,7 @@ class Account:
                 else:
                     print(colored("You have successfully signed in! ", 'green'))
                     self.signed_in = True
+                    return
                     
 
                 

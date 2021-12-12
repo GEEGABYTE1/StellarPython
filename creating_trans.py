@@ -3,29 +3,23 @@ from stellar_sdk.exceptions import NotFoundError, BadResponseError, BadRequestEr
 from account import db,  cluster
 from termcolor import colored
 from account import testnet_acc
+import time
 
 
-all_accounts = db.find({})
 
 class Contract:
     
     server = Server("https://horizon-testnet.stellar.org")
+    all_accounts = db.find({})
 
-    def __init__(self, server=self.server):
-        self.print_users()
-        time.sleep(0.2)
-        print("-"*24)
-        print("\n Here are all the users currently on the platform")
-        time.sleep(0.2)
-        print("\n")
-        target_source_key = str(input("Please enter the name of the user you would like to send a transactiont to: "))
-        print("Finding user...")
-        time.sleep(0.2)
-        result = self.fetch_users(target_source_key)
+    def __init__(self):
+        server = self.server
+     
+        result = self.fetch_users()
         if result[-1] == False:
             print(colored('{} was not found'.format(target_source_key), 'red'))
         else:
-            print(colored('{} was found successfully! '.format(target_source_key), 'green'))
+            print(colored('{} was found successfully! '.format(result[1]), 'green'))
             source_key = result[0]
             destination_id = result[1]
 
@@ -58,8 +52,10 @@ class Contract:
                 )
                 .append_payment_op(destination=destination_id, asset=Asset.native(), amount=lumen_amount)
                 .add_text_memo(user_message)
-                .set_timeout(10)
                 .build()
+                
+                #.set_timeout(2)
+                
             )
 
             transaction.sign(source_key)
@@ -72,7 +68,7 @@ class Contract:
                 time.sleep(0.2)
                 print('\n')
                 print('-'*24)
-                print(colored("Response: {}".format(response), 'blue '))            
+                print(colored("Response: {}".format(response), 'blue'))            
                 print('-'*24)
                 user_trans_list = result[-2]
                 transcation_detail = {'Destination_Key': result[1], 'Amount': lumen_amount, 'Message': user_message}
@@ -82,20 +78,18 @@ class Contract:
                 time.sleep(0.2)
 
 
-    def print_users(self):
-        for account in all_accounts:
-            print('\n')
-            print('-'*24)
-            print(account)
-
-    def fetch_users(self, user):
-        fetched = False 
-        for account in all_accounts:
+    def fetch_users(self, fetched=False):
+        user = str(input("Please enter the name of the user you would like to send a transaction to: "))
+        print("Finding user...")
+        time.sleep(0.2)
+        
+        for account in self.all_accounts:
             if account['Username'] == user:
                 fetched = True
                 return account['Skey'], account['Pkey'], account['Transactions'], fetched 
             else:
                 pass 
+
+        return [fetched]
     
-        return fetched
                 

@@ -40,7 +40,7 @@ class Contract:
             lumen_amount = str(input("Please enter the amount of lumen you would like to send: "))
             user_message = str(input("Please type in a message for the user (type /skip to skip this step): "))
             if user_message == '/skip':
-                user_message = None 
+                user_message = " " 
             
             ## Transaction Block
             transaction = (
@@ -52,9 +52,10 @@ class Contract:
                 )
                 .append_payment_op(destination=destination_id, asset=Asset.native(), amount=lumen_amount)
                 .add_text_memo(user_message)
+                .set_timeout(2)
                 .build()
                 
-                #.set_timeout(2)
+                
                 
             )
 

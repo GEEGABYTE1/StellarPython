@@ -2,6 +2,7 @@ from account import testnet_acc # Creating Account
 from creating_trans import Contract # Creating/Sending Transaction
 from account import db # Database
 
+
 import time
 from termcolor import colored
 
@@ -25,6 +26,7 @@ class Script:
         print("/receive_trans: to check or receive transactions")
         print("-"*24)
         time.sleep(0.2)
+        print("/view_trans: to view the amount of lumen and transactions you have currently")
         self.user_prompt()
 
 
@@ -48,6 +50,24 @@ class Script:
                 print(colored('Directing you to creating a transaction ', 'blue'))
                 user_trans = Contract()
                 print(user_trans)
+            
+            elif prompt == '/view_trans':
+                user_key = testnet_acc.user_key
+                for account in all_accounts:
+                    if account['PKey'] == user_key:
+                        transactions = account['Transactions']
+                        if len(transactions) != 0:
+                            for transaction in transactions:
+                                print('-'*24)
+                                print("\n")
+                                print(transaction)
+                        else:
+                            print("You have made no transactions yet!")
+            
+                                
+                            
+
+
         
         
         

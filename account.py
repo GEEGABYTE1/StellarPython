@@ -82,6 +82,7 @@ class Account:
     
     def __init__(self):
         self.signed_in = False
+        user_key = None
         print('\n')
         print('-'*25)
         print("/sign_up: To create a new Stellar account")
@@ -110,7 +111,8 @@ class Account:
                 else:
                     print(colored("You have successfully signed in! ", 'green'))
                     self.signed_in = True
-                    return
+                    self.user_key = user_key
+                    return 
                     
 
                 

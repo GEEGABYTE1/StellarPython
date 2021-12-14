@@ -68,7 +68,7 @@ class Script:
                         print("Type: {}".format(balance['asset_type']))
                         time.sleep(0.1)
                         print("Balance: {}".format(balance['balance']))
-            
+        
                                 
                             
 

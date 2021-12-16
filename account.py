@@ -47,11 +47,10 @@ class Account:
                 acc = {'Username': username, 'Pkey': public_key, 'Transactions': [], 'Paging_Token': None, 'Skey': self.keys[0]}
                 db.insert_one(acc)
             elif public_key == '/fetch_pk':
-                if len(self.keys) == 0:
-                    print("There is no key created or saved at this time")
-                    time.sleep(0.2)
-                else:
+                try:
                     public_key = self.keys[-1]
+                except:
+                    print(colored("There is no key saved ", 'red'))
 
         
             response = requests.get(f"https://friendbot.stellar.org?addr={public_key}")
@@ -103,16 +102,22 @@ class Account:
                 if user_key == '/quit':
                     continue 
                 if user_key == '/fetch_pk':
-                    print("Public Key: {}".format(self.keys[-1]))
-                    user_key = self.keys[-1]
-                result = self.sign_in(user_key)
-                if result == False:
-                    pass 
-                else:
-                    print(colored("You have successfully signed in! ", 'green'))
-                    self.signed_in = True
-                    self.user_key = user_key
-                    return 
+                    if len(self.keys) == 0:
+                        print(colored('There is no key saved', 'red'))
+                        continue
+                    else:
+                        print("Public Key: {}".format(self.keys[-1]))
+                        user_key = self.keys[-1]
+                    result = self.sign_in(user_key)
+                    if result == False:
+                        pass 
+                    else:
+                        print(colored("You have successfully signed in! ", 'green'))
+                        self.signed_in = True
+                        self.user_key = user_key
+                        return 
+            else:
+                print(colored("That command does not seem to be valid", 'red'))
                     
 
                 

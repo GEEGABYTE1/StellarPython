@@ -108,6 +108,10 @@ class Account:
                     else:
                         print("Public Key: {}".format(self.keys[-1]))
                         user_key = self.keys[-1]
+                elif len(user_key) != 56:
+                    print(colored("That Key is not valid", 'red'))
+                    continue
+                    
                 result = self.sign_in(user_key)
                 if result == False:
                     pass 

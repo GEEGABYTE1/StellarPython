@@ -73,6 +73,7 @@ class Account:
                     print("Type: {}".format(balance['asset_type']))
                     time.sleep(0.1)
                     print("Balance: {}".format(balance['balance']))
+                    return True
             except:
                 print(colored("That public key seems to be invalid", 'red'))
                 return False
@@ -108,13 +109,11 @@ class Account:
                     else:
                         print("Public Key: {}".format(self.keys[-1]))
                         user_key = self.keys[-1]
-                elif len(user_key) != 56:
-                    print(colored("That Key is not valid", 'red'))
-                    continue
+                
                     
                 result = self.sign_in(user_key)
-                if result == False:
-                    pass 
+                if result == False or result == None:
+                    continue 
                 else:
                     print(colored("You have successfully signed in! ", 'green'))
                     self.signed_in = True

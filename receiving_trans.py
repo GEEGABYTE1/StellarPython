@@ -1,11 +1,11 @@
-from stellar_skd import Server 
+from stellar_sdk import Server 
 from account import*
 from termcolor import colored
 
 def running(self):
     paging_token_update = save_paging_token(load_last_paging_token())
     receieve_payment()
-    
+
 
 def load_last_paging_token():
     return "now"

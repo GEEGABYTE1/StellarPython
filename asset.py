@@ -45,7 +45,7 @@ class Asset:
         return result, dictionary, user_des_user
 
 
-    def receive_asset(self):
+    def make_payment(self):
         distributor_keys = testnet_acc.keys
         distributor_secret_key = distributor_keys[-1]
         distributor_public_key = distributoer_keys[0]
@@ -103,7 +103,7 @@ class Asset:
             print(colored('User not found', 'red'))
             time.sleep(0.1)
 
-    def control_asset(self):
+    def control_asset_payment(self):
         distributor_keys = testnet_acc.keys
         distributor_secret_key = distributor_keys[-1]
         distributor_public_key = distributoer_keys[0]
@@ -142,7 +142,7 @@ class Asset:
         
         
 
-            
+asset = Asset()
         
         
 

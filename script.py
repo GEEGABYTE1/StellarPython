@@ -13,6 +13,7 @@ all_accounts = db.find({})
 class Script:
 
     def __init__(self):
+        print('\n')
         print("-"*24)
         time.sleep(0.2)
         if testnet_acc.signed_in != True:
@@ -29,6 +30,17 @@ class Script:
         print("-"*24)
         time.sleep(0.2)
         print("/view_trans: to view the amount of lumen and transactions you have currently")
+        print("-"*24)
+        time.sleep(0.2)
+        print("/issue_asset: To send and initialize an asset 'AstroDollar'")
+        print("-"*24)
+        time.sleep(0.2)
+        print("/issue_casset: Initialize and send controlled assets, 'AstroDollar'")
+        print("-"*24)
+        time.sleep(0.2)
+        print("/quit: to quit Stellar")
+        print("-"*24)
+        time.sleep(0.2)
         self.user_prompt()
 
 

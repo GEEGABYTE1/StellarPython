@@ -11,6 +11,9 @@ from termcolor import colored
 all_accounts = db.find({})
 
 class Script:
+    transactions = []
+    balances = {}
+    
 
     def __init__(self):
         print('\n')
@@ -20,6 +23,8 @@ class Script:
             print(colored("You have not signed in yet", 'red'))
             while testnet_acc.signed_in != True:
                 print(testnet_acc)
+
+        
         
         print(colored("Welcome to Stellar", 'blue'))
         time.sleep(0.2)
@@ -47,8 +52,24 @@ class Script:
     
     def user_prompt(self):
         while True:
+            time.sleep(0.3)
+            user_key = testnet_acc.user_key
+            for account in all_accounts:
+                if account['Pkey'] == user_key:
+                    transactions = account['Transactions']
+                    if len(transactions) != 0:
+                        for transaction in transactions:
+                            self.transactions.append(transaction)
+                    else:
+                        print("You have made no transactions yet!")
+            
+            account_connection = testnet_acc.server.accounts().account_id(testnet_acc.keys[0]).call()
+            for balance in account['balances']:
+                type_balance = balance['asset_type']
+                num = balance['balance']
+                self.balances[type_balance] = num
             print("\n")
-            prompt = str(input("Please enter a command: "))
+            prompt = str(input(": "))
             
             if prompt == '/create_trans':
                 time.sleep(0.1)
@@ -66,22 +87,16 @@ class Script:
                 print(user_trans)
             
             elif prompt == '/view_trans':
-                user_key = testnet_acc.user_key
-                for account in all_accounts:
-                    if account['PKey'] == user_key:
-                        transactions = account['Transactions']
-                        if len(transactions) != 0:
-                            for transaction in transactions:
-                                print('-'*24)
-                                print("\n")
-                                print(transaction)
-                        else:
-                            print("You have made no transactions yet!")
-            
-                    for balance in account['balances']:
-                        print("Type: {}".format(balance['asset_type']))
-                        time.sleep(0.1)
-                        print("Balance: {}".format(balance['balance']))
+                for transaction in self.transactions:
+                    print('\n')
+                    print(transaction)
+                    print('-'*24)
+                
+                for type_bal, balance in self.balances.items():
+                    print('\n')
+                    print('Balance Asset: {type}: {value}'.format(type=type_bal, value=balance))
+                    print('-'*24)
+                
             
             elif prompt == '/issue_asset':
                 time.sleep(0.1)

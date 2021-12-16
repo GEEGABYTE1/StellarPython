@@ -9,7 +9,7 @@ import time
 
 class Contract:
     
-    server = Server("https://horizon-testnet.stellar.org")
+    server = testnet_acc.server
     all_accounts = db.find({})
 
     def __init__(self):
@@ -20,14 +20,12 @@ class Contract:
             print(colored('{} was not found'.format(target_source_key), 'red'))
         else:
             print(colored('{} was found successfully! '.format(result[1]), 'green'))
-            source_key = result[0]
+            source_key = Keypair.from_secret(result[0])
             destination_id = result[1]
 
             #### FINDING USER ENDS 
 
-            ### CREATING TRANS STARTS 
-            source_key = Keypair.from_secret(source_key)
-            destination_id = destination_id
+            ### CREATING TRANS STARTS
 
             try:
                 self.server.load_account(destination_id)
@@ -52,7 +50,7 @@ class Contract:
                 )
                 .append_payment_op(destination=destination_id, asset=Asset.native(), amount=lumen_amount)
                 .add_text_memo(user_message)
-                .set_timeout(2)
+                #.set_timeout(2)
                 .build()
                 
                 
@@ -72,8 +70,8 @@ class Contract:
                 print(colored("Response: {}".format(response), 'blue'))            
                 print('-'*24)
                 user_trans_list = result[-2]
-                transcation_detail = {'Destination_Key': result[1], 'Amount': lumen_amount, 'Message': user_message}
-                user_trans_list.append(transcation_detail)
+                transaction_detail = {'Destination_Key': result[1], 'Amount': lumen_amount, 'Message': user_message}
+                user_trans_list.append(transaction_detail)
             except (BadRequestError, BadResponseError) as err:
                 print(colored('Something went wrong! ', 'red'))
                 time.sleep(0.2)

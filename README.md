@@ -1,3 +1,16 @@
-# Stellar 
+# Stellar 🪐
+ 
+ A Fully-Functional Python program to interact with the Stellar Network. 
 
-Note: This program is being ran on a testnet for beta reasons.
+
+# Creating an Account 
+
+
+# Creating Transactions 
+
+
+# Receiving Transactions 
+
+
+# Stellar-Network Tokens
+

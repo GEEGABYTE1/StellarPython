@@ -10,7 +10,7 @@ cluster = MongoClient('mongodb+srv://BlindCelery:stellar@stellar.hibrh.mongodb.n
 db = cluster['Accounts']['Stellar']
 
 class Account:
-    
+    server = None
     keys = []
     signed_in = False
     
@@ -66,7 +66,8 @@ class Account:
 
     def sign_in(self, public_key):
         try:
-            server = Server("https://horizon-testnet.stellar.org")
+            server_new = Server("https://horizon-testnet.stellar.org")
+            self.server = server_new
             account = server.accounts().account_id(public_key).call()
             try:
                 for balance in account['balances']:

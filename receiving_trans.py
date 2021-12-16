@@ -1,4 +1,4 @@
-from stellar_sdk import Server 
+from account import testnet_acc
 from account import*
 from termcolor import colored
 
@@ -28,7 +28,7 @@ def save_paging_token(paging_token):
     else:
         return checked
     
-server = Server("https://horizon-testnet.stellar.org")
+server = testnet_acc.server
 
 def receieve_payment():
     user_id = testnet_acc.keys[-1]

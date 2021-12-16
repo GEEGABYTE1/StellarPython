@@ -7,7 +7,7 @@ from termcolor import colored
 
 
 class Asset:
-    server = Server(horizon_url="https://horizon-testnet.stellar.org")
+    server = Server(horizon_url=testnet_acc.server)
     network_passphrase = Network.TESTNET_NETWORK_PASSPHRASE
     
 
@@ -46,11 +46,12 @@ class Asset:
 
 
     def make_payment(self):
-        distributor_keys = testnet_acc.keys
-        distributor_secret_key = distributor_keys[-1]
-        distributor_public_key = distributoer_keys[0]
-
         try:
+            distributor_keys = testnet_acc.keys
+            distributor_secret_key = distributor_keys[-1]
+            distributor_public_key = distributor_keys[0]
+
+        
             result = self.search_user()[0]
             dictionary = self.search_user()[1]
             user_des_user = self.search_user()[-1]

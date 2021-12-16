@@ -2,6 +2,11 @@ from stellar_skd import Server
 from account import*
 from termcolor import colored
 
+def running(self):
+    paging_token_update = save_paging_token(load_last_paging_token())
+    receieve_payment()
+    
+
 def load_last_paging_token():
     return "now"
 
@@ -20,6 +25,8 @@ def save_paging_token(paging_token):
     
     if checked == False:
         print(colored("Account not found", 'red'))
+    else:
+        return checked
     
 server = Server("https://horizon-testnet.stellar.org")
 

@@ -108,14 +108,14 @@ class Account:
                     else:
                         print("Public Key: {}".format(self.keys[-1]))
                         user_key = self.keys[-1]
-                    result = self.sign_in(user_key)
-                    if result == False:
-                        pass 
-                    else:
-                        print(colored("You have successfully signed in! ", 'green'))
-                        self.signed_in = True
-                        self.user_key = user_key
-                        return 
+                result = self.sign_in(user_key)
+                if result == False:
+                    pass 
+                else:
+                    print(colored("You have successfully signed in! ", 'green'))
+                    self.signed_in = True
+                    self.user_key = user_key
+                    return 
             else:
                 print(colored("That command does not seem to be valid", 'red'))
                     

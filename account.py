@@ -20,8 +20,8 @@ class Account:
         pair = Keypair.random()
         secret_pair = pair.secret
         public_pair = pair.public_key
-        self.keys.append(secret_pair)
         self.keys.append(public_pair)
+        self.keys.append(secret_pair)
         print(colored("Public key created", 'green'))
         print(time.sleep(0.2))
         print("Here is your public key: {}".format(public_pair))
@@ -44,7 +44,7 @@ class Account:
             public_key = public_key.lower()
             if public_key == '/create':
                 public_key = self.create_account()
-                acc = {'Username': username, 'Pkey': public_key, 'Transactions': [], 'Paging_Token': None, 'Skey': self.keys[0]}
+                acc = {'Username': username, 'Pkey': public_key, 'Transactions': [], 'Paging_Token': None, 'Skey': self.keys[-1]}
                 db.insert_one(acc)
             elif public_key == '/fetch_pk':
                 try:
@@ -79,6 +79,14 @@ class Account:
                 return False
         except:
             print(colored("Oops, something went wrong", 'red'))
+
+    def return_s_p_key(self, user_key):
+        all_accounts = db.find({})
+        for account in all_accounts:
+            if account['Pkey'] == user_key:
+                self.keys.append(account['Pkey'])
+                self.keys.append(account['Skey'])
+        
     
     def __init__(self):
         self.signed_in = False
@@ -118,6 +126,8 @@ class Account:
                     print(colored("You have successfully signed in! ", 'green'))
                     self.signed_in = True
                     self.user_key = user_key
+                    self.return_s_p_key(self.user_key)
+                    
                     return 
             else:
                 print(colored("That command does not seem to be valid", 'red'))

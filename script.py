@@ -1,6 +1,7 @@
 from account import testnet_acc # Creating Account
 from creating_trans import Contract # Creating/Sending Transaction
 from account import db # Database
+from asset import asset #AstroDollar and Tokenizing
 
 
 import time
@@ -68,6 +69,18 @@ class Script:
                         print("Type: {}".format(balance['asset_type']))
                         time.sleep(0.1)
                         print("Balance: {}".format(balance['balance']))
+            
+            elif prompt == '/issue_asset':
+                time.sleep(0.1)
+                asset.make_payment()
+            
+            elif prompt == '/issue_casset':
+                time.sleep(0.1)
+                asset.control_asset_payment()
+            
+            
+                
+
         
                                 
                             

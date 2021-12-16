@@ -1,4 +1,5 @@
-from stellar_sdk import Asset, Keypair, Network, Server, TransactionBuilder
+from stellar_sdk import Asset, Keypair, Network, Server, TransactionBuilder, AuthorizationFlag
+from stellar_sdk.exceptions import BaseHorizonError
 from account import testnet_acc, db
 from termcolor import colored
 
@@ -23,13 +24,8 @@ class Asset:
             print(colored("Asset successfully created", 'green'))
         except:
             print("Tha public key is not found")
-
-
-    def receive_asset(self):
-        distributor_keys = testnet_acc.keys
-        distributor_secret_key = distributor_keys[-1]
-        distributor_public_key = distributoer_keys[0]
-
+    
+    def search_user(self):
         all_accounts = db.find({})
         dictionary = {}
 
@@ -46,10 +42,19 @@ class Asset:
         time.sleep(0.1)
         user_des_user = str(input("Please type in a username you would like to send your asset to: "))
         result = dictionary.get(user_des_user, None)
-        if result == None:
-            print(colored('User not found', 'red'))
-            time.sleep(0.1)
-        else:
+        return result, dictionary, user_des_user
+
+
+    def receive_asset(self):
+        distributor_keys = testnet_acc.keys
+        distributor_secret_key = distributor_keys[-1]
+        distributor_public_key = distributoer_keys[0]
+
+        try:
+            result = self.search_user()[0]
+            dictionary = self.search_user()[1]
+            user_des_user = self.search_user()[-1]
+            
             issuing_keypair = Keypair.from_secret(dictionary[user_des_user])
             issuing_public = issuing_keypair.public_key 
 
@@ -61,7 +66,7 @@ class Asset:
             trust_transaction = (
                 TransactionBuilder(
                     source_account = distributor_account,
-                    network_passphrase=network_passphrase,
+                    network_passphrase=self.network_passphrase,
                     base_fee = 100,
                 )
                 .append_change_trust_op(asset=astro_dollar, limit='1000')
@@ -79,7 +84,7 @@ class Asset:
             payment_transaction = (
                 TransactionBuilder(
                     source_account=issuing_account,
-                    network_passphrase=network_passphrase,
+                    network_passphrase=self.network_passphrase,
                     base_fee=100,
                 )
                 .append_payment_op(
@@ -94,6 +99,49 @@ class Asset:
             payment_transaction_resp = self.server.submit_transaction(payment_transaction)
         
             print("Payment Transaction Resp: {}".format(payment_transaction_resp))
+        except:
+            print(colored('User not found', 'red'))
+            time.sleep(0.1)
+
+    def control_asset(self):
+        distributor_keys = testnet_acc.keys
+        distributor_secret_key = distributor_keys[-1]
+        distributor_public_key = distributoer_keys[0]
+        try:
+            result = self.search_user()[0]
+            dictionary = self.search_user()[1]
+            user_des_user = self.search_user()[-1]
+
+            issuing_keypair = Keypair.from_secret(dictionary[user_des_user])
+            issuing_public = issuing_keypair.public_key
+            issuing_account = self.server.load_account(issuing_public)
+            
+            prompt_transaction = (
+                TransactionBuilder(
+                    source_account=issuing_account,
+                    network_passphrase=self.network_passphrase,
+                    base_fee=100,
+                )
+                .append_set_options_op(
+                    set_flags=AuthorizationFlag.AUTHORIZATION_REVOCABLE | AuthorizationFlag.AUTHORIZATION_REQUIRED
+                )
+                .build()
+            )
+
+            transaction.sign(issuing_keypair)
+            try:
+                transaction_resp = self.server.submit_transaction(transaction)
+                print("Transaction Resp: {}".format(transaction_resp))
+            except BaseHorizonError as e:
+                print("Error: {}".format(e))
+        
+        except:
+            print(colored('User not found', 'red'))
+            time.sleep(0.1)
+
+        
+        
+
             
         
         

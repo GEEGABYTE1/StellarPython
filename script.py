@@ -2,6 +2,7 @@ from account import testnet_acc # Creating Account
 from creating_trans import Contract # Creating/Sending Transaction
 from account import db # Database
 from asset import asset #AstroDollar and Tokenizing
+from receiving_trans import running
 
 
 import time
@@ -78,7 +79,17 @@ class Script:
                 time.sleep(0.1)
                 asset.control_asset_payment()
             
-            
+            elif prompt == '/receieve_trans':
+                time.sleep(0.1)
+                running()
+            elif prompt == '/quit':
+                break
+            else:
+                print("Command not found!")
+        
+        print(colored("You have successfully quitted Stellar! ", 'blue'))
+    
+
                 
 
         

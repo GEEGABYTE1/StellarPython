@@ -7,20 +7,23 @@ import time
 
 
 
+
 class Contract:
-    
+
     server = testnet_acc.server
     all_accounts = db.find({})
+    saved_acc = None
+
 
     def __init__(self):
         server = self.server
      
         result = self.fetch_users()
         if result[-1] == False:
-            print(colored('{} was not found'.format(target_source_key), 'red'))
+            print(colored('Account was not found', 'red'))
         else:
             print(colored('{} was found successfully! '.format(result[1]), 'green'))
-            source_key = Keypair.from_secret(result[0])
+            source_key = Keypair.from_secret(testnet_acc.keys[-1])
             destination_id = result[1]
 
             #### FINDING USER ENDS 
@@ -35,7 +38,7 @@ class Contract:
             source_account = server.load_account(source_key.public_key)
             
             base_fee = server.fetch_base_fee()
-            lumen_amount = str(input("Please enter the amount of lumen you would like to send: "))
+            lumen_amount = str(int(input("Please enter the amount of lumen you would like to send: ")))
             user_message = str(input("Please type in a message for the user (type /skip to skip this step): "))
             if user_message == '/skip':
                 user_message = " " 
@@ -69,26 +72,38 @@ class Contract:
                 print('-'*24)
                 print(colored("Response: {}".format(response), 'blue'))            
                 print('-'*24)
-                user_trans_list = result[-2]
+                
                 transaction_detail = {'Destination_Key': result[1], 'Amount': lumen_amount, 'Message': user_message}
-                user_trans_list.append(transaction_detail)
+                self.fetch_users(trans=transaction_detail)
+                
+                
             except (BadRequestError, BadResponseError) as err:
                 print(colored('Something went wrong! ', 'red'))
                 time.sleep(0.2)
 
 
-    def fetch_users(self, fetched=False):
-        user = str(input("Please enter the name of the user you would like to send a transaction to: "))
-        print("Finding user...")
-        time.sleep(0.2)
-        
-        for account in self.all_accounts:
-            if account['Username'] == user:
-                fetched = True
-                return account['Skey'], account['Pkey'], account['Transactions'], fetched 
-            else:
-                pass 
-
-        return [fetched]
+    def fetch_users(self, fetched=False, trans=None):
+        if trans != None:
+            account_trans = self.saved_acc['Transactions']
+            account_trans.append(trans)
     
+
+        else:
+            try:
+                user = str(input("Please enter the name of the user you would like to send a transaction to: "))
+                print("Finding user...")
+                time.sleep(0.2)
+                
+                for account in self.all_accounts:
+                    if account['Username'] == user:
+                        self.saved_acc = account
+                        fetched = True
+                        return account['Skey'], account['Pkey'], account['Transactions'], fetched 
+                    else:
+                        pass 
+
+                return [fetched]
+            except:
+                print(colored("User not found", 'red'))
+        
                 

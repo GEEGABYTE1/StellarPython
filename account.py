@@ -13,6 +13,7 @@ class Account:
     server = None
     keys = []
     signed_in = False
+    og_account = None
     
     def create_account(self):
         if len(self.keys) > 0:
@@ -68,7 +69,7 @@ class Account:
         try:
             server_new = Server("https://horizon-testnet.stellar.org")
             self.server = server_new
-            account = server.accounts().account_id(public_key).call()
+            account = self.server.accounts().account_id(public_key).call()
             try:
                 for balance in account['balances']:
                     print("Type: {}".format(balance['asset_type']))
@@ -85,6 +86,7 @@ class Account:
         all_accounts = db.find({})
         for account in all_accounts:
             if account['Pkey'] == user_key:
+                self.og_account = account
                 self.keys.append(account['Pkey'])
                 self.keys.append(account['Skey'])
         

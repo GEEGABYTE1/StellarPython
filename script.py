@@ -8,12 +8,13 @@ from receiving_trans import running
 import time
 from termcolor import colored
 
+
 all_accounts = db.find({})
 
 class Script:
-    transactions = []
+    #transactions = []
     balances = {}
-    
+    account_signed_in = testnet_acc.og_account
 
     def __init__(self):
         print('\n')
@@ -34,7 +35,7 @@ class Script:
         print("/receive_trans: to check or receive transactions")
         print("-"*24)
         time.sleep(0.2)
-        print("/view_trans: to view the amount of lumen and transactions you have currently")
+        print("/view_bal: to view the amount of lumen and transactions you have currently")
         print("-"*24)
         time.sleep(0.2)
         print("/issue_asset: To send and initialize an asset 'AstroDollar'")
@@ -53,18 +54,10 @@ class Script:
     def user_prompt(self):
         while True:
             time.sleep(0.3)
-            user_key = testnet_acc.user_key
-            for account in all_accounts:
-                if account['Pkey'] == user_key:
-                    transactions = account['Transactions']
-                    if len(transactions) != 0:
-                        for transaction in transactions:
-                            self.transactions.append(transaction)
-                    else:
-                        print("You have made no transactions yet!")
-            
+            #user_key = testnet_acc.user_key
+        
             account_connection = testnet_acc.server.accounts().account_id(testnet_acc.keys[0]).call()
-            for balance in account['balances']:
+            for balance in account_connection['balances']:
                 type_balance = balance['asset_type']
                 num = balance['balance']
                 self.balances[type_balance] = num
@@ -73,24 +66,12 @@ class Script:
             
             if prompt == '/create_trans':
                 time.sleep(0.1)
-                for account in all_accounts:
-                    print('\n')
-                    print('-'*24)
-                    print(account)
-                time.sleep(0.2)
-                print("-"*24)
-                print("\n Here are all the users currently on the platform")
-                time.sleep(0.2)
                 print("\n")
                 print(colored('Directing you to creating a transaction ', 'blue'))
                 user_trans = Contract()
-                print(user_trans)
+                #print(user_trans)
             
-            elif prompt == '/view_trans':
-                for transaction in self.transactions:
-                    print('\n')
-                    print(transaction)
-                    print('-'*24)
+            elif prompt == '/view_bal':
                 
                 for type_bal, balance in self.balances.items():
                     print('\n')
@@ -106,7 +87,7 @@ class Script:
                 time.sleep(0.1)
                 asset.control_asset_payment()
             
-            elif prompt == '/receieve_trans':
+            elif prompt == '/receive_trans':
                 time.sleep(0.1)
                 running()
             elif prompt == '/quit':

@@ -7,7 +7,7 @@ from termcolor import colored
 
 
 class Asset:
-    server = Server(horizon_url=testnet_acc.server)
+    server = testnet_acc.server
     network_passphrase = Network.TESTNET_NETWORK_PASSPHRASE
     
 

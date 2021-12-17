@@ -2,7 +2,7 @@ from account import testnet_acc
 from account import*
 from termcolor import colored
 
-def running(self):
+def running():
     paging_token_update = save_paging_token(load_last_paging_token())
     receieve_payment()
 
@@ -31,25 +31,28 @@ def save_paging_token(paging_token):
 server = testnet_acc.server
 
 def receieve_payment():
-    user_id = testnet_acc.keys[-1]
-    payments = server.payments().for_account(user_id)
-    
-    last_token = load_last_paging_token()
-    if last_token:
-        payments.cursor(last_token)
+    try:
+        user_id = testnet_acc.keys[0]
+        payments = server.payments().for_account(user_id)
         
-        for payment in payments.stream():
-            save_paging_token(payment['paging_token'])
+        last_token = load_last_paging_token()
+        if last_token:
+            payments.cursor(last_token)
+            
+            for payment in payments.stream():
+                save_paging_token(payment['paging_token'])
 
-            if payment['type'] != 'payment':
-                continue 
-            if payment['to'] != account_id:
-                continue
-            if payment['asset_type'] == 'native':
-                asset = 'Lumens'
-            else:
-                asset = f"{payment['asset_code']}:{payment['asset_issuer']}"
-            print("Payment: {amount} from payment from {sender}".format(amount=asset, sender=payment['from']))
+                if payment['type'] != 'payment':
+                    continue 
+                if payment['to'] != account_id:
+                    continue
+                if payment['asset_type'] == 'native':
+                    asset = 'Lumens'
+                else:
+                    asset = f"{payment['asset_code']}:{payment['asset_issuer']}"
+                print("Payment: {amount} from payment from {sender}".format(amount=asset, sender=payment['from']))
+    except:
+        print(colored('The account {} could not be found '.format(user_id), 'red'))
 
 
 

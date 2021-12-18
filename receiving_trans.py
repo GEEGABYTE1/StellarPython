@@ -27,7 +27,6 @@ def fetch_users(fetched=False):
         
         for account in account_server:
             if account['Username'] == user:
-                self.saved_acc = account
                 fetched = True
                 return account['Pkey'], account['Skey']
             else:
@@ -41,7 +40,7 @@ def receieve_payment():
     try:
         while True:
             fetched_user = fetch_users()
-            if type(fetched_user) != list:
+            if type(fetched_user) != tuple:
                 continue
             else:
                 break

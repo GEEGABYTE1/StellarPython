@@ -24,7 +24,13 @@ class Contract:
         else:
             print(colored('{} was found successfully! '.format(result[1]), 'green'))
             source_key = Keypair.from_secret(testnet_acc.keys[-1])
-            destination_id = result[1]
+            user_prompt = str(input('Are you sending lumen on the real chain? (Type y/n)'))
+            user_prompt = user_prompt.strip(" ")
+            if user_promt == 'n':
+                destination_id = result[1]
+            else:
+                destination_id = str(input("Please type in the desired account's private key: "))
+                destination_id = destination_id.strip(" ")
 
             #### FINDING USER ENDS 
 

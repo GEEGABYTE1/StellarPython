@@ -5,7 +5,7 @@
 Users can send, receive and create assets while interacting with the Stellar Chain.
 
 
-# Creating an Account 
+# Creating an Account 🔑
 
 It should be first noted that this program is ran on a testnet for safety reasons. However, if users want to connect to the real chain. 
 
@@ -33,7 +33,7 @@ The actual server link can be found on Stellar's Website, which is linked below 
 Once the user has successfully signed in, they should receieve a successful message and their lumen balance. They will then shortly be prompted with a set of commands to interact with StellarPython.
 
 
-# Creating Transactions 
+# Creating Transactions 🔀
 Transactions on Stellar a little different. Transactions on stellar are very sensible. If any operation in a transaction fails, they all fail. For example, if a user has 100 lumens and the user makes two payment operations of 60 lumens each. If the user makes two transactions (each with one operation), the first will succeed and the second will fail because the user doesn't have enough lumens. The user will be left with 40 lumens. However, if the user groups the two payments into a single transaction, they will both fail and the user will be left with the full 100 lumens still in your account. 
 
 Every transaction also incurs a small fee. Like the minimum balance on accounts, this fee deters spam and prevents people from overloading the system. This base fee is 100 stroops per operations where a stroop equals *1 * 10^-7 XLM* - and it's charged for each operation. This may differ if the user is only the real Stellar Chain. Thus, if a transaction consists of two operations, for example, would cost 200 stroops. 
@@ -62,7 +62,7 @@ The third possible error is not having the correct `network_passphrase`, in whic
   - Testnet: `Network.TESTNET_NETWORK_PASSPHRASE`
   - Live: `Network.PUBLIC_NETWORK_PASSPHRASE`
 
-# Receiving Transactions 
+# Receiving Transactions 🔁
 
 Stellar automatically sends and receieves different assets. Users don't have to run this part of the program, but it is good practice to watch out for incoming payments. 
 
@@ -73,7 +73,7 @@ The second part of the program is where the results of the query are streamed. T
 In order to run this, the user must run StellarPython as two different processes, of which one will be having the `/track` command ran. When the command is typed, the user will be faced with a prompt to type in a user they want to see incoming transactions from. After that, the query process starts, and which the user can track transactions related to their account.
 
 
-# Stellar-Network Tokens
+# Stellar-Network Tokens 🍀
 
 Assets are created with a payment operation: an issuing acccount makes a payment using the asset it's issuing, and that payment actually creates the asset on the network. On StellarPython, the asset issued will become the native transaction saved for the program. It is also recommended that the user creates issuing and distribution accounts. Distributing assets through a distribution account is a design pattern. Functionally, the user can do away with the distribution account and distribute directly from the issuer account. Moreover, the two main reasons to use a distribution account is for Security and Auditing. 
 
@@ -115,9 +115,9 @@ If the desired account's private key does not actually match with an account on 
 For creating and signing the transaction, the only possible error is if the are problems with creation of the asset, and which should be reviewed. Users can visit Stellar's Documentation (link unde *Resources`) for more information.
 
 
-
-# Resources
+# Resources 🧠
 - Stellar Doc: https://developers.stellar.org/docs
 - Lumen Buying Guide: https://www.stellar.org/lumens/exchanges
 - Stellar: https://www.stellar.org
 
+Made in Python 🐍

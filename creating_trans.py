@@ -73,7 +73,6 @@ class Contract:
                 print(colored("Response: {}".format(response), 'blue'))            
                 print('-'*24)
                 
-
                        
             except (BadRequestError, BadResponseError) as err:
                 print(colored('Something went wrong! ', 'red'))

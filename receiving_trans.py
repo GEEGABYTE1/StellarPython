@@ -17,6 +17,7 @@ def save_paging_token(paging_token):
     pass
     
 server = testnet_acc.server
+account_chosen = None
 
 def fetch_users(fetched=False):
     
@@ -28,6 +29,7 @@ def fetch_users(fetched=False):
         
         for account in account_server:
             if account['Username'] == user:
+                account_chosen = account
                 fetched = True
                 return account['Pkey'], account['Skey']
             else:
@@ -51,11 +53,14 @@ def receieve_payment():
             payments = server.payments().for_account(user_id)
             
             last_token = load_last_paging_token()
+            
             if last_token:
                 payments.cursor(last_token)
                 
                 for payment in payments.stream():
                     save_paging_token(payment['paging_token'])
+                    acccount_chosen['Paging_Token'] = payment['paging_token']
+
 
                     if payment['type'] != 'payment':
                         continue 

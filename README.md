@@ -34,6 +34,29 @@ Once the user has successfully signed in, they should receieve a successful mess
 
 
 # Creating Transactions 
+Transactions on Stellar a little different. Transactions on stellar are very sensible. If any operation in a transaction fails, they all fail. For example, if a user has 100 lumens and the user makes two payment operations of 60 lumens each. If the user makes two transactions (each with one operation), the first will succeed and the second will fail because the user doesn't have enough lumens. The user will be left with 40 lumens. However, if the user groups the two payments into a single transaction, they will both fail and the user will be left with the full 100 lumens still in your account. 
+
+Every transaction also incurs a small fee. Like the minimum balance on accounts, this fee deters spam and prevents people from overloading the system. This base fee is 100 stroops per operations where a stroop equals *1 * 10^-7 XLM* - and it's charged for each operation. This may differ if the user is only the real Stellar Chain. Thus, if a transaction consists of two operations, for example, would cost 200 stroops. 
+
+When creating a transaction or sending lumens, it is necessary that the user knows who they want to send it to. When they first type the command, `/create_trans`, they will be prompted with a list of users on the testnet, which they need to choose a user. However, should the user be running on a real network, there may not be all the users, but StellarPython will locate the account by the user typing in their desired account's private key.
+
+*Note*: If user is running on a live network, the `network_passphrase` of the `TransactionBuilder()` class should change:
+- `network_passphrase=Network.LIVESERVERPASSPHRASE`
+
+The user can find the `LIVESERVERPASSPHRASE` on either Stellar's Documentation or on their website, which will be under `Resources`.
+
+Once the user has been located, the user will be faced with a  prompt for the number of lumens and a message. Users can type `/skip`, to skip the message if needed, and the program will continue to sign the transaction.
+
+If the transaction is successful, the user will receieve a success message with the transaction details. If there is any problem however, users will get an error message, which may be in red, and the transaction will be canceled. 
+
+## Errors
+
+When a transaction fails, there are multiple reasons. One, if the desired account's private key does not actually match with an account on either the real chain or on the testnet. In this case, users must double check their public key's and if they are using the right keys. For users on testnet, it should be double checked that they are typing in the user's correct username. 
+
+The second possible error is if the amount of lumens the user wants to send exceeds the amount of lumen the sender user actually has. In this case, StellarPython will cancel the transaction, and the user may need to evalute their amounts of lumen. This may also interrupt the signing transaction process, which can also interrupt the transaction creation.
+
+The third possible error is not having the correct `network_passphrase`, in which, the user may need to research the live server passphrase or need to use the testnet passphrase: `TESTNET_NETWORK_PASSPHRASE`. 
+
 
 
 # Receiving Transactions 

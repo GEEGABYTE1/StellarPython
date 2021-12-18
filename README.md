@@ -87,7 +87,33 @@ On StellarPython, as long as the issuer account remains *unlocked*, it can conti
 
 If users are planning to do anything with their asset, their next step is to complete a `stellar.toml` file to provide wallets, exchanges, market listing services, and potential token holders with the information they need to understand what it represent. There is a sample stellar.toml file located in the repository called `sample.toml`. More parameters can be added by using Stellar's Doc, which is linked under *Resources*. 
 
-StellarPython uses AstroDollar as the asset, however, it can be changed between different assets including Lumen. 
+StellarPython uses AstroDollar as the asset, however, it can be changed between different assets including Lumen. It should be noted that if the user is on the live network, the network passphrase must change:
+- `network_passphrase = Network.PUBLIC_NETWORK_PASSPHRASE`
+
+Here is the astro dollar creation, which can be altered for different assets:
+- `astro_dollar = Asset("AstroDollar", prompt)`
+
+Users will be prompted to send their new AstroDollars, which is recommended that they send it to their issuing account. After the process, the balances for the distributor's account will now hold both XLM and Astrodollars, or their created asset. 
+
+## Controlled Assets 
+
+When you issue an asset on Stellar, anyone can hold it by default. However, it you need to control access to an asset to comply with regulations (or for any other reason), users can easily do so by enabling flags on their issuing account. StellarPython uses the AuthorizationSandwich process, which allows the issuer to inspect the specific payment, and to grant authoriziation for it and it alone. Since operations bundled in a transaction are simultaneous, A and B are only authorized for the specific, pre-approved payment operation. Complete authorization does not extend beyond the specific transaction. 
+
+Creating the asset process, and configurations remains the same, however, the command the user must type to create a controlled asset is `/issue_casset`.
+
+## Errors
+
+Possible errors may include not connecting to the network, incorrect user to send your asset to, and signining or creating the transaction. 
+
+When there is a problem with connecting to the network, users should decide upon either connecting to the Testnet or the live server. The user should only be connected to one, and not multiple throughout different processes, such as creating transactions. In order to make sure, all network passphrases must be the same.
+
+- Testnet: `Network.TESTNET_NETWORK_PASSPHRASE`
+- Live: `Network.PUBLIC_NETWORK_PASSPHRASE`
+
+If the desired account's private key does not actually match with an account on either the real chain or on the testnet. In this case, users must double check their public key's and if they are using the right keys. For users on testnet, it should be double checked that they are typing in the user's correct username. 
+
+For creating and signing the transaction, the only possible error is if the are problems with creation of the asset, and which should be reviewed. Users can visit Stellar's Documentation (link unde *Resources`) for more information.
+
 
 
 # Resources

@@ -69,8 +69,7 @@ class Script:
                 print("\n")
                 print(colored('Directing you to creating a transaction ', 'blue'))
                 user_trans = Contract()
-                #print(user_trans)
-            
+                
             elif prompt == '/view_bal':
                 
                 for type_bal, balance in self.balances.items():

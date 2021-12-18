@@ -26,7 +26,7 @@ After users have created an account, users can sign in by typing their public ke
 There are times where the user may run into an error. This is due to the fact that either their public key does not match or that the server is not connected. If the public key does not match, users should make sure that they are using the right key, which has been prompted out when originally creating an account with `/sign_up`. If the public key does not work, the testnet account may have expired, which will require the user to create another account. 
 
 However, if the user is on a real Stellar network, they should make sure that the program has connected to the server. In order to make sure, users must set:
-`server_new = Server("https://horizon-testnet.stellar.org") to server_new = Server("RealServerLink")` 
+- `server_new = Server("https://horizon-testnet.stellar.org") to server_new = Server("RealServerLink")` 
 
 The actual server link can be found on Stellar's Website, which is linked below under *Resources*. When the user changes the server, it is necessary that they change all transaction classes to follow suit. Users can read more about this under *Creating Transactions*.
 

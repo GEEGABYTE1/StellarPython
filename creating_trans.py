@@ -73,37 +73,31 @@ class Contract:
                 print(colored("Response: {}".format(response), 'blue'))            
                 print('-'*24)
                 
-                transaction_detail = {'Destination_Key': result[1], 'Amount': lumen_amount, 'Message': user_message}
-                self.fetch_users(trans=transaction_detail)
-                
-                
+
+                       
             except (BadRequestError, BadResponseError) as err:
                 print(colored('Something went wrong! ', 'red'))
                 time.sleep(0.2)
-
-
-    def fetch_users(self, fetched=False, trans=None):
-        if trans != None:
-            account_trans = self.saved_acc['Transactions']
-            account_trans.append(trans)
-    
-
-        else:
-            try:
-                user = str(input("Please enter the name of the user you would like to send a transaction to: "))
-                print("Finding user...")
-                time.sleep(0.2)
                 
-                for account in self.all_accounts:
-                    if account['Username'] == user:
-                        self.saved_acc = account
-                        fetched = True
-                        return account['Skey'], account['Pkey'], account['Transactions'], fetched 
-                    else:
-                        pass 
 
-                return [fetched]
-            except:
-                print(colored("User not found", 'red'))
+
+    def fetch_users(self, fetched=False):
+    
+        try:
+            user = str(input("Please enter the name of the user you would like to send a transaction to: "))
+            print("Finding user...")
+            time.sleep(0.2)
+            
+            for account in self.all_accounts:
+                if account['Username'] == user:
+                    self.saved_acc = account
+                    fetched = True
+                    return account['Skey'], account['Pkey'], account['Transactions'], fetched 
+                else:
+                    pass 
+
+            return [fetched]
+        except:
+            print(colored("User not found", 'red'))
         
                 

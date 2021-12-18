@@ -30,6 +30,8 @@ However, if the user is on a real Stellar network, they should make sure that th
 
 The actual server link can be found on Stellar's Website, which is linked below under *Resources*. When the user changes the server, it is necessary that they change all transaction classes to follow suit. Users can read more about this under *Creating Transactions*.
 
+Once the user has successfully signed in, they should receieve a successful message and their lumen balance. They will then shortly be prompted with a set of commands to interact with StellarPython.
+
 
 # Creating Transactions 
 

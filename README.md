@@ -117,6 +117,7 @@ For creating and signing the transaction, the only possible error is if the are 
 
 
 # Resources
-
-Lumen Buying Guide: https://www.stellar.org/lumens/exchanges
+- Stellar Doc: https://developers.stellar.org/docs
+- Lumen Buying Guide: https://www.stellar.org/lumens/exchanges
+- Stellar: https://www.stellar.org
 

@@ -2,11 +2,12 @@ from stellar_sdk import Asset, Keypair, Network, Server, TransactionBuilder, Aut
 from stellar_sdk.exceptions import BaseHorizonError
 from account import testnet_acc, db
 from termcolor import colored
+import time
 
 
 
 
-class Asset:
+class Asset_S:
     server = testnet_acc.server
     network_passphrase = Network.TESTNET_NETWORK_PASSPHRASE
     
@@ -34,8 +35,7 @@ class Asset:
             user_secret = account['Skey']
             dictionary[username] = user_secret 
             print('-'*24)
-            print(username)
-            print('\n')
+            print(colored(username, 'blue'))
             time.sleep(0.2)
 
         print('-'*24)
@@ -51,10 +51,10 @@ class Asset:
             distributor_secret_key = distributor_keys[-1]
             distributor_public_key = distributor_keys[0]
 
-        
-            result = self.search_user()[0]
-            dictionary = self.search_user()[1]
-            user_des_user = self.search_user()[-1]
+            iteration = self.search_user()
+            result = iteration[0]
+            dictionary = iteration[1]
+            user_des_user = iteration[-1]
             
             issuing_keypair = Keypair.from_secret(dictionary[user_des_user])
             issuing_public = issuing_keypair.public_key 
@@ -70,7 +70,7 @@ class Asset:
                     network_passphrase=self.network_passphrase,
                     base_fee = 100,
                 )
-                .append_change_trust_op(asset=astro_dollar, limit='1000')
+                .append_change_trust_op(asset=astro_dollar, limit='10000')
                 .set_timeout(100)
                 .build() 
 
@@ -79,8 +79,11 @@ class Asset:
             trust_transaction.sign(distributor_secret_key)
             trust_transaction_resp = self.server.submit_transaction(trust_transaction)
             print("Change Trust Transaction Resp: {}".format(trust_transaction_resp))
+            print('\n')
 
             issuing_account = self.server.load_account(issuing_public)
+
+            user_amount = str(input("Please type in an amount you would like to send: "))
 
             payment_transaction = (
                 TransactionBuilder(
@@ -91,27 +94,33 @@ class Asset:
                 .append_payment_op(
                     destination=distributor_public_key,
                     asset=Asset.native(),
-                    amount="10",
+                    amount=user_amount,
                 )
                 .build()
             )
 
             payment_transaction.sign(issuing_keypair)
             payment_transaction_resp = self.server.submit_transaction(payment_transaction)
-        
-            print("Payment Transaction Resp: {}".format(payment_transaction_resp))
+
+            print('\n')
+            print(colored("Payment Transaction Resp: {}".format(payment_transaction_resp), 'blue'))
+            print('-'*24)
+            print('\n')
+            
         except:
-            print(colored('User not found', 'red'))
+            print(colored('Something went wrong', 'red'))
             time.sleep(0.1)
 
     def control_asset_payment(self):
         distributor_keys = testnet_acc.keys
         distributor_secret_key = distributor_keys[-1]
-        distributor_public_key = distributoer_keys[0]
+        distributor_public_key = distributor_keys[0]
         try:
-            result = self.search_user()[0]
-            dictionary = self.search_user()[1]
-            user_des_user = self.search_user()[-1]
+            
+            iteration = self.search_user()
+            result = iteration[0]
+            dictionary = iteration[1]
+            user_des_user = iteration[-1]
 
             issuing_keypair = Keypair.from_secret(dictionary[user_des_user])
             issuing_public = issuing_keypair.public_key
@@ -143,7 +152,7 @@ class Asset:
         
         
 
-asset = Asset()
+asset = Asset_S()
         
         
 

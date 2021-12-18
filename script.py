@@ -32,7 +32,7 @@ class Script:
         print("/create_trans: to create a transaction")
         print("-"*24)
         time.sleep(0.2)
-        print("/receive_trans: to check or receive transactions")
+        print("/track: log transactions that are coming in")
         print("-"*24)
         time.sleep(0.2)
         print("/view_bal: to view the amount of lumen and transactions you have currently")
@@ -56,11 +56,7 @@ class Script:
             time.sleep(0.3)
             #user_key = testnet_acc.user_key
         
-            account_connection = testnet_acc.server.accounts().account_id(testnet_acc.keys[0]).call()
-            for balance in account_connection['balances']:
-                type_balance = balance['asset_type']
-                num = balance['balance']
-                self.balances[type_balance] = num
+            
             print("\n")
             prompt = str(input(": "))
             
@@ -71,11 +67,15 @@ class Script:
                 user_trans = Contract()
                 
             elif prompt == '/view_bal':
-                
-                for type_bal, balance in self.balances.items():
+
+                account_connection = testnet_acc.server.accounts().account_id(testnet_acc.keys[0]).call()
+                for balance in account_connection['balances']:
+                    type_balance = balance['asset_type']
+                    num = balance['balance']
                     print('\n')
-                    print('Balance Asset: {type}: {value}'.format(type=type_bal, value=balance))
+                    print('Balance Asset: {type}: {value}'.format(type=type_balance, value=num))
                     print('-'*24)
+                 
                 
             
             elif prompt == '/issue_asset':
@@ -86,7 +86,7 @@ class Script:
                 time.sleep(0.1)
                 asset.control_asset_payment()
             
-            elif prompt == '/receive_trans':
+            elif prompt == '/track':
                 time.sleep(0.1)
                 running()
             elif prompt == '/quit':

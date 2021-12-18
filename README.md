@@ -45,7 +45,11 @@ When creating a transaction or sending lumens, it is necessary that the user kno
 
 The user can find the `LIVESERVERPASSPHRASE` on either Stellar's Documentation or on their website, which will be under `Resources`.
 
-Once the user has been located, the user will be faced with a  prompt for the number of lumens and a message. Users can type `/skip`, to skip the message if needed, and the program will continue to sign the transaction.
+Once the user has been located, the user will be faced with a  prompt for the number of lumens and a message. Users can type `/skip`, to skip the message if needed, and the program will continue to sign the transaction. Users can also specify their the type of asset they are sending (read more under *Receiving Transactions*). Stellar's network currency is the *Lumen*, but the user can send any asset issued on the network (both live or testnet, more info under *Receiving Transactions*).
+
+- `.append_payment_op(destination=destination_id, asset=Asset.native(), amount="10")`
+
+Users should also note that the amount is a string rather than a number. When working with extremely small fractions or large values, floating point math can introduce small inaccuracies. Since not all systems have a native way to accurately represent extremely small or large decimals, Stellar uses strings as a reliable way to represent the exact amount across any system.
 
 If the transaction is successful, the user will receieve a success message with the transaction details. If there is any problem however, users will get an error message, which may be in red, and the transaction will be canceled. 
 
@@ -58,8 +62,15 @@ The second possible error is if the amount of lumens the user wants to send exce
 The third possible error is not having the correct `network_passphrase`, in which, the user may need to research the live server passphrase or need to use the testnet passphrase: `TESTNET_NETWORK_PASSPHRASE`. 
 
 
-
 # Receiving Transactions 
+
+Stellar automatically sends and receieves different assets. Users don't have to run this part of the program, but it is good practice to watch out for incoming payments. 
+
+There are two main parts of the program. First, the user creates a query for payments involving a given account. Like most queries in Stellar, this could return a huge number of items, so the API returns paging tokens, which you can use later to start your query from the same point where you previusly left off. In StellarPython, the functions to save and load pagain tokens are left blank, but when working with a real netowrk, the user would want to save the paging tokens to a file or a database so the program can pick up where it had left off when closed. Luckily, StellarPython does save the paging token for each transaction under a database for the user. 
+
+The second part of the program is where the results of the query are streamed. This is the easiest way to watch for payments or other transactions. Each existing payment is sent through the stream, one by one. Once all existing payments have been sent, the stream says open and new payments are sent as they are made.
+
+In order to run this, the user must run StellarPython as two different processes, of which one will be having the `/track` command ran. When the command is typed, the user will be faced with a prompt to type in a user they want to see incoming transactions from. After that, the query process starts, and which the user can track transactions related to their account.
 
 
 # Stellar-Network Tokens

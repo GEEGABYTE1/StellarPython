@@ -2,6 +2,7 @@ from account import testnet_acc
 from account import*
 from termcolor import colored
 from creating_trans import Contract
+from account import db
 
 
 def running():
@@ -15,11 +16,10 @@ def load_last_paging_token():
 def save_paging_token(paging_token):
     pass
     
-server = testnet_acc.server
-server_contract_accounts = Contract()
-account_server = server_contract_accounts.all_accounts
 
 def fetch_users(fetched=False):
+    server = testnet_acc.server
+    account_server = db.find({})
     try:
         user = str(input("Please enter the name of the sender you would like to see transactions from: "))
         print("Finding user...")
@@ -39,30 +39,33 @@ def fetch_users(fetched=False):
 
 def receieve_payment():
     try:
-        fetched_user = fetch_users()
-        if type(fetched_user) != list:
-            print("Account not found")
-        else:
+        while True:
+            fetched_user = fetch_users()
+            if type(fetched_user) != list:
+                continue
+            else:
+                break
+        
             
-            user_id = fetched_user[0]
-            payments = server.payments().for_account(user_id)
+        user_id = fetched_user[0]
+        payments = server.payments().for_account(user_id)
+        
+        last_token = load_last_paging_token()
+        if last_token:
+            payments.cursor(last_token)
             
-            last_token = load_last_paging_token()
-            if last_token:
-                payments.cursor(last_token)
-                
-                for payment in payments.stream():
-                    save_paging_token(payment['paging_token'])
+            for payment in payments.stream():
+                save_paging_token(payment['paging_token'])
 
-                    if payment['type'] != 'payment':
-                        continue 
-                    if payment['to'] != user_id:
-                        continue
-                    if payment['asset_type'] == 'native':
-                        asset = 'Lumens'
-                    else:
-                        asset = f"{payment['asset_code']}:{payment['asset_issuer']}"
-                    print("Payment: {amount} from payment from {sender}".format(amount=asset, sender=payment['from']))
+                if payment['type'] != 'payment':
+                    continue 
+                if payment['to'] != user_id:
+                    continue
+                if payment['asset_type'] == 'native':
+                    asset = 'Lumens'
+                else:
+                    asset = f"{payment['asset_code']}:{payment['asset_issuer']}"
+                print("Payment: {amount} from payment from {sender}".format(amount=asset, sender=payment['from']))
     except:
         print(colored('The account {} could not be found '.format(user_id), 'red'))
 
